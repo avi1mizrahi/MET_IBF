@@ -1,3 +1,4 @@
+import itertools
 import unittest
 from unittest import TestCase
 
@@ -21,6 +22,19 @@ class TestIBF(TestCase):
         l = self.ibf.peel()
 
         self.assertCountEqual(l, [10, 50, 100])
+
+    def test_insert_from(self):
+        s1 = [132]
+        s2 = {1, 2, 100}
+        s3 = (1000, 1002)
+
+        self.ibf.insert_from(s1)
+        self.ibf.insert_from(s2)
+        self.ibf.insert_from(s3)
+
+        l = self.ibf.peel()
+
+        self.assertCountEqual(l, itertools.chain(s1, s2, s3))
 
     def test_delete(self):
         self.ibf.insert(10)

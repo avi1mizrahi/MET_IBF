@@ -6,17 +6,31 @@ import numpy as np
 
 import hashing
 
-np_type = np.uint64
+np_type = np.int64
 
 
 class InvertibleBloomFilterAPI(ABC):
     def insert(self, x):
         pass
 
+    def insert_from(self, s: Iterable):
+        """
+        Helper method.
+        :param s: set of elements to be inserted.
+        """
+        for x in s:
+            self.insert(x)
+
     def delete(self, x):
         pass
 
     def peel(self) -> Collection:
+        """
+        Return the elements that were inserted to the IBF.
+        Notes:
+             - The collection can be partial.
+             - The operation is destructive; returned elements are deleted.
+        """
         pass
 
     def __bool__(self):
