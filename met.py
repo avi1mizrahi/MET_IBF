@@ -62,6 +62,7 @@ class IBF(InvertibleBloomFilterAPI):
         self.n += c
         self.T[0, idxs] += np_type(c)
         self.T[1, idxs] ^= np_type(x)
+        return idxs
 
     def insert(self, x):
         self._indel(x, 1)
@@ -69,18 +70,20 @@ class IBF(InvertibleBloomFilterAPI):
     def delete(self, x):
         self._indel(x, -1)
 
-    def _peel_once(self):
-        to_delete = {int(xor) for count, xor in self.T.T if count == 1}
-
-        for x in to_delete:
-            self.delete(x)
-
-        return to_delete
-
     def peel(self) -> Collection:
+        pure_cells = {i for i, (count, xor) in enumerate(self.T.T) if count == 1}
         res = []
-        while peels := self._peel_once():
-            res.extend(peels)
+
+        while pure_cells:
+            i_pure = pure_cells.pop()
+            x = int(self.T[1, i_pure])
+            res.append(x)
+            idxs = self._indel(x, -1)
+            for i in idxs:
+                if self.T[0, i] == 1:
+                    pure_cells.add(i)
+                if self.T[0, i] == 0:
+                    pure_cells.discard(i)
 
         return res
 
