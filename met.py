@@ -36,6 +36,10 @@ class InvertibleBloomFilterAPI(ABC):
     def __bool__(self):
         pass
 
+    @property
+    def m(self):
+        pass
+
 
 class IBF(InvertibleBloomFilterAPI):
     def __init__(self, m: int, hasher: Callable[[int], Iterable[int]]):
@@ -133,3 +137,7 @@ class METIBF(InvertibleBloomFilterAPI):
 
     def __bool__(self):
         return any(map(bool, self.tables))
+
+    @property
+    def m(self):
+        return self.M.sum()
