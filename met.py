@@ -1,5 +1,5 @@
 import itertools
-from abc import ABC
+from abc import ABC, abstractmethod
 from collections.abc import Callable, Collection, Iterable
 
 import numpy as np
@@ -10,6 +10,7 @@ np_type = np.int64
 
 
 class InvertibleBloomFilterAPI(ABC):
+    @abstractmethod
     def insert(self, x):
         pass
 
@@ -21,9 +22,11 @@ class InvertibleBloomFilterAPI(ABC):
         for x in s:
             self.insert(x)
 
+    @abstractmethod
     def delete(self, x):
         pass
 
+    @abstractmethod
     def peel(self) -> Collection:
         """
         Return the elements that were inserted to the IBF.
@@ -33,10 +36,12 @@ class InvertibleBloomFilterAPI(ABC):
         """
         pass
 
+    @abstractmethod
     def __bool__(self):
         pass
 
     @property
+    @abstractmethod
     def m(self):
         pass
 
