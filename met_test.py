@@ -74,6 +74,9 @@ class TestIBF(TestCase):
         self.ibf.delete(1313)
         self.assertFalse(self.ibf)
 
+    def test_number_of_cells(self):
+        self.assertEqual(self.ibf.m, self.m)
+
 
 class TestIrregularIBF(TestCase):
     m = 10
@@ -146,6 +149,7 @@ class TestMETIBF(TestIBF):
             m_cells=m_cells,
             key2type=self.key2type,
         )
+        self.m = sum(m_cells)
 
     def test_peel2(self):
         elements = [
